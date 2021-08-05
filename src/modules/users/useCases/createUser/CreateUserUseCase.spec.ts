@@ -21,29 +21,27 @@ describe("Create a user", () => {
 
         const result = await createUserUseCase.execute(user)
 
-        expect(result).toHaveProperty("id");
-        expect(result).toHaveProperty("email");
-        expect(result).toHaveProperty("password");
+        expect(result).toEqual(
+            expect.objectContaining({
+                id: result.id,
+                name: result.name,
+                email: result.email
+            })
+        );
     });
 
     it("should not be able to create a user with exists email", async () => {
 
-        const user1: ICreateUserDTO = {
+        const user1 = {
             name: "Romário de Souza Faria",
             email: "camisa9@brazil.com",
             password: "baixinho"
         };
 
         await createUserUseCase.execute(user1)
-        
-        const user2: ICreateUserDTO = {
-            name: "Romário de Souza Faria",
-            email: "camisa9@brazil.com",
-            password: "baixinho"
-        };
 
         await expect(
-            createUserUseCase.execute(user2)
+            createUserUseCase.execute(user1)
         ).rejects.toEqual(new CreateUserError());
     });
 

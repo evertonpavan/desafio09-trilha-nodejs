@@ -30,10 +30,16 @@ describe("Authenticate User", () => {
             password: user.password,
         });
 
-        expect(result).toHaveProperty("user");
-        expect(result.user).toHaveProperty("id");
-        expect(result.user).toHaveProperty("email");
-        expect(result).toHaveProperty("token");
+        expect(result).toEqual(
+            expect.objectContaining({
+                token: result.token,
+                user: { 
+                    id: result.user.id,
+                    name: result.user.name,
+                    email: result.user.email
+                }
+            })
+        );
     });
 
     it("Should not be able to authenticate an nonexistent user", async () => {
